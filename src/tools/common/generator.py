@@ -3,7 +3,6 @@
 class Generator(object):
  
     def __init__(self,path,mode):
-        print(path)
         if not path or len(path) == 0:
             raise AttributeError("invalid path") 
         self.path = path
@@ -18,8 +17,8 @@ class Generator(object):
         full_path = self.path
         file_path,file_name = os.path.split(full_path)
 
-        if os.access(export_full_path, os.F_OK):
-            raise RuntimeError("file was exists,we can not create.path:%s" % export_full_path)
+        if os.access(full_path, os.F_OK):
+            raise RuntimeError("file was exists,we can not create.path:%s" % full_path)
         if not os.path.exists(file_path):
             os.makedirs(file_path)
 
@@ -64,7 +63,7 @@ class Generator(object):
         for index,line in enumerate(source_file):
             if "@LastUpdatetime" in line:
                 swp_file.writelines("** @LastUpdatetime %s \n" % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-                continue;
+                continue
             if "** new added **" in line or "** end new added **" in line:
                 continue        
             if "/** translate content start **/" in line:
@@ -88,8 +87,6 @@ class Generator(object):
                     writed.append(text)
             else:
                 swp_file.writelines(line)
-        print(langs)
-        print(writed)
         swp_file.flush()
         swp_file.close()
         # copy swp file to override source file
