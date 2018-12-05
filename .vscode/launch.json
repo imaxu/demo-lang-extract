@@ -11,9 +11,9 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args":[
-                "--source=./src/tools/source/",
-                "--export=./src/tools/export/",
-                "--lang=en-us"
+                "--source=./src/sample/scripts/",
+                "--lang=en-us",
+                "--tag=_"
             ]
         },
         {

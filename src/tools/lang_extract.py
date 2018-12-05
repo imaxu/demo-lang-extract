@@ -22,8 +22,8 @@ def gettext():
         k,v = sys.argv[i].split("=")
         args.append({ k : v})
 
-    # 默认源码目录
-    source = ".{sep}source".format(sep=os.path.sep)
+    # 默认源码目录，多个目录可英文逗号分隔
+    watch = ".{sep}source".format(sep=os.path.sep)
     # 默认输出目录
     export = ".{sep}i18n".format(sep=os.path.sep)
     # 要生成的资源名称，默认为zh-cn
@@ -32,8 +32,9 @@ def gettext():
     tag = "lang"
 
     for arg in args:
-        if "--source" in arg:
-            source = arg["--source"]
+        if "--watch" in arg:
+
+            watch = arg["--watch"]
         if "--export" in arg:
             export = arg["--export"] 
         if "--lang" in arg:
@@ -42,8 +43,8 @@ def gettext():
             tag = arg["--tag"]                                  
     try:
        
-        print("* Extracter is extracting words from %s  " % os.path.abspath(source))
-        langs = Extracter().from_js(source,tag)
+        print("* Extracter is extracting words from %s  " % watch)
+        langs = Extracter().read(watch.split(","),tag)
         if len(langs) == 0 :
             print("WARN:\tfound 0 words.")
             return

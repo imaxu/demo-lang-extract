@@ -13,10 +13,10 @@
 ```
 ##### 3. 使用实用工具对js中的可翻译文本进行提取
 ```bash
-    python lang_extract.py --source=..\sample\scripts\ --export=..\i18n\ --lang=us-en
+    python lang_extract.py --watch=..\sample\scripts\ --export=..\i18n\ --lang=us-en
 ```
 ##### 参数说明
---source    提取来源，一般是项目js目录，默认source
+--watch    提取来源，一般是项目js目录，默认source目录。可用`,`分隔多个目录
 
 --export    生成文件要保存的位置，默认i18n
 
