@@ -5,7 +5,7 @@
 	window.document.writeln(_("新增文字重复内容"));
 	window.document.writeln(_("新增文字重复内容"));
 	window.document.writeln(_("新增文字内容2"));
-
+	window.document.writeln(_('新增文字内容3'));
 	//变量
 	var text = "这是变量文字";
 	window.document.writeln(_(text));

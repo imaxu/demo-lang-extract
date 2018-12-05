@@ -23,7 +23,7 @@ class Extracter(object):
                     f = open(file,"r",encoding='UTF-8')
                     for line in f.readlines():    
                         line = line.strip()
-                        regex = r"%s\(\"(.*?)\"\)" % tag
+                        regex = r"%s\([\"\'](.*?)[\"\']\)" % tag
                         pattern = re.compile(regex, re.I)
                         match_result = pattern.findall(line)
                         if len(match_result) > 0:
