@@ -17,5 +17,5 @@
 ```
 4. 将生成的国际化jsw资源文件引入到项目中，请保证引入的位置在`enjoy.common.i18n.js`之前。
 ```html
-	<script type="text/javascript" src="../i18n/us-en.js"></script>
+    <script type="text/javascript" src="../i18n/us-en.js"></script>
 ```
