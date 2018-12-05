@@ -7,7 +7,7 @@ class Extracter(object):
     def __init__(self):
         pass
 
-    def from_js(self,path,tag="_"):
+    def from_js(self,path,tag="lang"):
         langs = []
         for root, dirs, files in os.walk(path, topdown=False):
             for name in files:
