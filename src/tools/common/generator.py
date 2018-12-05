@@ -1,19 +1,32 @@
 # -*- coding:utf-8 -*-
 
 class Generator(object):
- 
-    def __init__(self,path,mode):
+    """多语言词典脚本生成器
+
+    提供对已提取词组生成language.js文件。
+    """
+    def __init__(self,path,mode,lang="zh-cn"):
+        """
+        Args:
+            path:生成文件的保存路径。
+            mode:指定生成器模式，A = Create 创建模式  U = Update 更新模式。
+        Returns:
+            Raises:
+                AttributeError:缺少参数或者参数超出范围
+        """
         if not path or len(path) == 0:
             raise AttributeError("invalid path") 
         self.path = path
 
-        if mode not in ["a","u"]:
+        if not mode or str.lower(mode) not in ["a","u"]:
             raise AttributeError("invalid mode with %s" % mode) 
-        self.mode = mode
+        self.mode = str.lower(mode)
+        if not lang:
+            raise AttributeError("invalid lang") 
+        self.lang = str.lower(lang)        
 
     def __create__(self):
         import os,time
-
         full_path = self.path
         file_path,file_name = os.path.split(full_path)
 
@@ -29,7 +42,7 @@ class Generator(object):
         file.writelines("**/\n")
         file.writelines("var _dict = (function(){\n")
         file.writelines("\treturn {\n")
-        file.writelines("\t\t\"lang_name\":\"%s\",\n" % "zh-cn")
+        file.writelines("\t\t\"lang_name\":\"%s\",\n" % self.lang)
         file.writelines("\t\t/** translate content start **/\n")
         # generate translate contents.
         for l in self.langs:
@@ -94,10 +107,18 @@ class Generator(object):
         os.remove(swp_file_full_path)
 
     def load(self,langs=[]):
+        """装载词组
+        Args:
+        langs:词汇数组，格式如["投币","出票"]
+        Returns:
+        返回装载了词组的Generator实例
+        """
         self.langs = langs
         return self
 
     def flush(self):
+        """保存缓冲区的内容到实例指定的路径
+        """
         if self.mode == "a":
             self.__create__()
             return

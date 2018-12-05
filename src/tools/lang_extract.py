@@ -1,5 +1,13 @@
 # -*- coding:utf8 -*-
 
+# @Name         词汇自动提取工具
+# @Desc         从文本文件中提取出所有tag("xx")并将xx输出到language.js中
+# @Auth         xuwh
+# @Vers         1.0
+# @Date         2018-12-5
+# @Useage:      python lang_extract.py --source=..\sample\scripts\ --export=..\i18n\ --lang=us-en
+# @Dependency:  python3.6+ 
+
 import re
 import time 
 import os
@@ -17,6 +25,9 @@ def gettext():
         k,v = sys.argv[i].split("=")
         args.append({ k : v})
 
+    path = None
+    export = None
+    lang = None
     for arg in args:
         if "--source" in arg:
             path = arg["--source"]
@@ -36,6 +47,7 @@ def gettext():
     if len(langs) == 0 :
         print("WARN:\tfound 0 words.")
         return
+
     export_file_path = export
     export_file_name = "%s.js" % lang
     export_full_path = "%s%s" % (export_file_path,export_file_name)
@@ -43,9 +55,9 @@ def gettext():
         os.makedirs(export_file_path)
 
     if not os.access(export_full_path, os.F_OK):
-        Generator(export_full_path,"a").load(langs).flush()
+        Generator(export_full_path,"A",lang).load(langs).flush()
     else:
-        Generator(export_full_path,"u").load(langs).flush()   
+        Generator(export_full_path,"U",lang).load(langs).flush()   
 
 def main():
     gettext()

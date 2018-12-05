@@ -14,3 +14,5 @@ function lang(key){
 
 
 };
+
+var _ = lang;
