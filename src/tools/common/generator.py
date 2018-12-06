@@ -39,7 +39,7 @@ class Generator(object):
         file_path,file_name = os.path.split(full_path)
 
         if os.access(full_path, os.F_OK):
-            raise RuntimeError("file was exists,we can not create.path:%s" % full_path)
+            os.remove(full_path)
         if not os.path.exists(file_path):
             os.makedirs(file_path)
 
@@ -55,16 +55,14 @@ class Generator(object):
 
         file.writelines("\t\t%s\n\n" % self.__custom_start__)
         file.writelines("\t\t//本块内容不会被自动化工具编辑，可在本块内编辑自定义内容，也可以放开下面注释测试。\n")
-        file.writelines("\t\t//\"自定义内容\":\"custom content\",\n\n")
+        file.writelines("\t\t//\"自定义内容\":\"custom content\",\n\n\n")
         file.writelines("\t\t%s\n\n\n" % self.__custom_end__)
 
         file.writelines("\t\t%s\n\n" % self.__start_str__)
         # generate translate contents.
-        for l in self.langs:
-            if l.startswith("//"):
-                file.writelines("\t\t%s\n\n" % l)
-                continue
-            file.writelines("\t\t\"%s\":\"\",\n\n" % l)
+        for l in self.langs: 
+            for k,v in l.items(): 
+                file.writelines("\t\t\"%s\":\"%s\",\n\n" %(k,v))
         # / generate translate contents.
         file.writelines("\t\t%s\n\n\n" % self.__end_str__)
 
@@ -92,6 +90,11 @@ class Generator(object):
 
         is_trans_area = False
         writed = []
+        all_keys = []
+        for l in langs:
+            for k,v in l.items():
+                all_keys.append(k)
+
         for index,line in enumerate(source_file):
             if "@LastUpdatetime" in line:
                 swp_file.writelines("** @LastUpdatetime %s \n" % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
@@ -108,17 +111,18 @@ class Generator(object):
             if self.__end_str__ in line:
                 is_trans_area = False
                 swp_file.writelines("\t\t%s\n\n" % self.__added_start__)
-                for l in langs:           
-                    if l not in writed:
-                        swp_file.writelines("\t\t\"%s\":\"\",\n\n" % l)
+                for l in langs:
+                    for k,v in l.items():         
+                        if k not in writed:
+                            swp_file.writelines("\t\t\"%s\":\"%s\",\n\n" % (k,v))
                 swp_file.writelines("\t\t%s\n\n\n" % self.__added_end__)
                 swp_file.writelines(line)
                 continue
 
             if is_trans_area:
                 text = line.strip("\t").split("\":\"")[0].strip("\"")
-                if text in langs:
-                    swp_file.writelines(line)
+                if text in all_keys:
+                    swp_file.writelines("%s\n" % line)
                     writed.append(text)
             else:
                 swp_file.writelines(line)

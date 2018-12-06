@@ -33,7 +33,6 @@ def gettext():
 
     for arg in args:
         if "--watch" in arg:
-
             watch = arg["--watch"]
         if "--export" in arg:
             export = arg["--export"] 
@@ -52,8 +51,6 @@ def gettext():
         export_file_path = export if export.endswith(os.path.sep) else "{0}{sep}".format(export,sep=os.path.sep)
         export_file_name = "%s.js" % lang
         export_full_path = "%s%s" % (export_file_path,export_file_name)
-        if not os.path.exists(export_file_path):
-            os.makedirs(export_file_path)
 
         if not os.access(export_full_path, os.F_OK):
             Generator(export_full_path,"A",lang).load(langs).flush()
