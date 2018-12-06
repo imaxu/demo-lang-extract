@@ -61,6 +61,9 @@ class Generator(object):
         file.writelines("\t\t%s\n\n" % self.__start_str__)
         # generate translate contents.
         for l in self.langs:
+            if l.startswith("//"):
+                file.writelines("\t\t%s\n\n" % l)
+                continue
             file.writelines("\t\t\"%s\":\"\",\n\n" % l)
         # / generate translate contents.
         file.writelines("\t\t%s\n\n\n" % self.__end_str__)
@@ -99,10 +102,13 @@ class Generator(object):
                 is_trans_area = True
                 swp_file.writelines(line)
                 continue
+            if line.startswith("//"):
+                swp_file.writelines(line)
+                continue
             if self.__end_str__ in line:
                 is_trans_area = False
                 swp_file.writelines("\t\t%s\n\n" % self.__added_start__)
-                for l in langs:
+                for l in langs:           
                     if l not in writed:
                         swp_file.writelines("\t\t\"%s\":\"\",\n\n" % l)
                 swp_file.writelines("\t\t%s\n\n\n" % self.__added_end__)
